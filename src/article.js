@@ -10,7 +10,6 @@ class Article extends Component{
 
   render(){
     return(
-
       <article className="article">
         <section className="featuredImage">
           <img src={this.props.image} alt="" />

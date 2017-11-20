@@ -10,12 +10,33 @@ import Article from './article';
 import Loader from './loader'
 
 class App extends Component {
+  constructor(props){
+    super(props)
+
+    this.getArticle = this.getArticle.bind(this)
+
+  }
 
   state = {
     showLoader: false
   }
 
+  getArticle() {
+    fetch("https://accesscontrolalloworiginall.herokuapp.com/http://digg.com/api/news/popular.json")
+    .then(results => results.json())
+    .then(data => {
+    if(data.status !== `OK`) {
+      console.log("HELLO");
+      console.log(data);
+    }else{
+      console.log("something is wrong with the article fetch");
+    }
+  })
+}
+
+
   render() {
+    this.getArticle()
     return (
       <div>
         <Header />
