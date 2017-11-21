@@ -1,54 +1,77 @@
 import React, { Component } from 'react';
 import searchImg from './images/search.png';
-import p1 from './images/article_placeholder_1.jpg';
-import p2 from './images/article_placeholder_2.jpg';
 import './App.css';
 import './CSS/htmlbp5.css';
 import './CSS/normalize.css';
 import Header from './header';
 import Article from './article';
 import Loader from './loader'
+const bbc = "https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=ee3927e291d041e6ba8fd44f4c0516ed"; //Top Headlines from BBC News
+const telegraph = "https://newsapi.org/v2/top-headlines?sources=the-telegraph&apiKey=ee3927e291d041e6ba8fd44f4c0516ed"
+const nyTimes = "https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed";
+
 
 class App extends Component {
   constructor(props){
     super(props)
-
-    this.getArticle = this.getArticle.bind(this)
+    this.getArticles = this.getArticles.bind(this)
 
   }
 
   state = {
-    showLoader: false
+    showLoader: false,
+    defaultArticles: [],
+    hasArticles:true
   }
 
-  getArticle() {
-    fetch("https://accesscontrolalloworiginall.herokuapp.com/http://digg.com/api/news/popular.json")
+  getArticles() {
+    fetch(nyTimes)
     .then(results => results.json())
     .then(data => {
-    if(data.status !== `OK`) {
-      console.log("HELLO");
-      console.log(data);
-    }else{
-      console.log("something is wrong with the article fetch");
-    }
-  })
-}
+      if(data.status !== `OK`) {
 
+        this.setState({
+          defaultArticles: data.articles,
+          hasArticles:true
+        })
+      }else{
+        console.log("something is wrong with the article fetch");
+      }
+    })
+  }
+
+
+  componentDidMount() {
+    if(!this.hasArticles){
+      this.getArticles()
+    }
+  }
 
   render() {
-    this.getArticle()
-    return (
-      <div>
-        <Header />
-        <Loader showLoader={this.state.showLoader} />
-        <section id="main" className="container">
-          <Article title="tit" category="cat" image={p1} ranking="2" />
-          <Article title="tit" category="cat" image={p1} ranking="2"/>
-          <Article title="tit" category="cat" image={p1} ranking="2"/>
-          <Article title="tit" category="cat" image={p1} ranking="2"/>
-        </section>
-      </div>
-    );
+    if(this.state.hasArticles){
+      return(
+        <div>
+          <Header />
+          <Loader showLoader={this.state.showLoader} />
+          <section id="main" className="container">
+            {this.state.defaultArticles.map(article => {
+              return (
+                  <Article
+                    title={article.title}
+                    category={article.author}
+                    image={article.urlToImage}
+                    ranking={'0'}
+                  />
+              )
+            })}
+          </section>
+        </div>
+      )
+    }else{
+      return (
+        <div>Fail</div>
+      )
+    }
   }
 }
 
