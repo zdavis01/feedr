@@ -6,8 +6,6 @@ import './CSS/normalize.css';
 import Header from './header';
 import Article from './article';
 import Loader from './loader'
-const bbc = "https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=ee3927e291d041e6ba8fd44f4c0516ed"; //Top Headlines from BBC News
-const telegraph = "https://newsapi.org/v2/top-headlines?sources=the-telegraph&apiKey=ee3927e291d041e6ba8fd44f4c0516ed"
 const nyTimes = "https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed";
 
 
@@ -15,13 +13,23 @@ class App extends Component {
   constructor(props){
     super(props)
     this.getArticles = this.getArticles.bind(this)
+    this.switchSource = this.switchSource.bind(this)
 
   }
 
   state = {
     showLoader: false,
     defaultArticles: [],
-    hasArticles:true
+    hasArticles:true,
+    newsSource: ''
+
+  }
+
+  switchSource(source){
+    console.log(source);
+    this.setState({
+      newsSource: source
+    })
   }
 
   getArticles() {
@@ -32,7 +40,7 @@ class App extends Component {
 
         this.setState({
           defaultArticles: data.articles,
-          hasArticles:true
+          hasArticles:true,
         })
       }else{
         console.log("something is wrong with the article fetch");
@@ -48,10 +56,24 @@ class App extends Component {
   }
 
   render() {
-    if(this.state.hasArticles){
+    if(!this.state.hasArticles && this.state.showLoader){
       return(
         <div>
-          <Header />
+          <Header
+            switchSource={this.switchSource}
+          />
+          <Loader showLoader={this.state.showLoader} />
+          <section id="main" className="container">
+
+          </section>
+        </div>
+      )
+    }else{
+      return (
+        <div>
+          <Header
+            switchSource={this.switchSource}
+          />
           <Loader showLoader={this.state.showLoader} />
           <section id="main" className="container">
             {this.state.defaultArticles.map(article => {
@@ -66,10 +88,6 @@ class App extends Component {
             })}
           </section>
         </div>
-      )
-    }else{
-      return (
-        <div>Fail</div>
       )
     }
   }
