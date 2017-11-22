@@ -25,9 +25,9 @@ class Header extends Component{
     var s = target == 't'? tdt: target == 'b'? bbc: nyt
     this.props.switchSource(s.url)
 
-    // this.setState({
-    //   source: s.name
-    // })
+    this.setState({
+      source: s
+    })
   }
 
     refreshFeed(){

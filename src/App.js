@@ -34,12 +34,11 @@ class App extends Component {
   }
 
   getArticles(source) {
-    console.log(source);
     fetch(source)
     .then(results => results.json())
     .then(data => {
       if(data.status === `ok`) {
-        console.log(data);
+        //console.log(data);
         this.setState({
           defaultArticles: data.articles,
           hasArticles:true,
@@ -55,9 +54,6 @@ class App extends Component {
 
   }
 
-componentDidUpdate(){
-  console.log('rendered with:', this.state.newsSource);
-}
   componentDidMount() {
 
     if(!this.hasArticles){
@@ -73,9 +69,7 @@ componentDidUpdate(){
             switchSource={this.switchSource}
           />
           <Loader showLoader={this.state.showLoader} />
-          <section id="main" className="container">
-
-          </section>
+          <section id="main" className="container"></section>
         </div>
       )
     }else{
@@ -88,14 +82,14 @@ componentDidUpdate(){
           <section id="main" className="container">
             {this.state.defaultArticles.map(article => {
               return (
-                  <Article
-                    title={article.title}
-                    category={article.author}
-                    image={article.urlToImage}
-                    ranking={article.publishedAt}
-                    description={article.description}
-                    url={article.url}
-                  />
+                <Article
+                  title={article.title}
+                  category={article.author}
+                  image={article.urlToImage}
+                  ranking={article.publishedAt}
+                  description={article.description}
+                  url={article.url}
+                />
               )
             })}
           </section>
