@@ -26,10 +26,11 @@ class App extends Component {
   }
 
   switchSource(source){
-    //console.log(source);
-
-
     this.getArticles(source)
+
+    this.setState({
+      showLoader:true
+    })
   }
 
   getArticles(source) {

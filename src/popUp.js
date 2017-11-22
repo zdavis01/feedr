@@ -12,12 +12,11 @@ class PopUp extends Component {
   }
 
   close() {
+
     this.setState({
       display: "none"
     })
-    console.log(this.state.display)
     this.props.closePopUp()
-    // you have to change the state of showPopUp for a particular article back to false
   }
 
   render() {

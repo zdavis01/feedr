@@ -13,6 +13,7 @@ class Header extends Component{
   constructor(props){
     super(props)
   this.updateSource = this.updateSource.bind(this)
+  this.refreshFeed = this.refreshFeed.bind(this)
   }
 
   state = {
@@ -23,14 +24,22 @@ class Header extends Component{
     var target = e.target.id
     var s = target == 't'? tdt: target == 'b'? bbc: nyt
     this.props.switchSource(s.url)
+
+    // this.setState({
+    //   source: s.name
+    // })
   }
+
+    refreshFeed(){
+      this.props.switchSource(nyt.url)
+    }
 
   render(){
     return(
       <div>
         <header>
           <section className="container">
-            <a href="#"><h1>Feedr</h1></a>
+            <a href="#" onClick={this.refreshFeed}><h1>Feedr</h1></a>
               <nav>
                 <ul>
                   <li><a href="#">News Source: <span>{this.state.source.name}</span></a>
