@@ -4,7 +4,7 @@ import './App.css';
 import './CSS/htmlbp5.css';
 import './CSS/normalize.css';
 import Header from './header';
-import Article from './article';
+import Article from './Article';
 import Loader from './loader'
 const nyTimes = "https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed";
 
@@ -18,34 +18,41 @@ class App extends Component {
   }
 
   state = {
-    showLoader: false,
+    showLoader: true,
     defaultArticles: [],
     hasArticles:true,
-    newsSource: ''
+    newsSource: nyTimes
 
   }
 
   switchSource(source){
     console.log(source);
     this.setState({
-      newsSource: source
+      newsSource: source,
+      hasArticles: false
     })
+
+    this.getArticles()
   }
 
   getArticles() {
-    fetch(nyTimes)
+    fetch(this.state.newsSource)
     .then(results => results.json())
     .then(data => {
       if(data.status !== `OK`) {
-
+        console.log(data);
         this.setState({
           defaultArticles: data.articles,
           hasArticles:true,
+          showLoader: false
         })
       }else{
         console.log("something is wrong with the article fetch");
       }
+    }).catch(error => {
+      console.log(error);
     })
+
   }
 
 
@@ -82,7 +89,9 @@ class App extends Component {
                     title={article.title}
                     category={article.author}
                     image={article.urlToImage}
-                    ranking={'0'}
+                    ranking={article.publishedAt}
+                    description={article.description}
+                    url={article.url}
                   />
               )
             })}
