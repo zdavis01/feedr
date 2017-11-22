@@ -24,6 +24,7 @@ class PopUp extends Component {
       <div className="popUp" style={{display: this.state.display}}>
         <a href="#" className="closePopUp" onClick={this.close}>X</a>
           <div className="container">
+            <img class="preview" src={this.props.image} alt="" />
             <h1>{this.props.title}</h1>
               <p>
                 {this.props.description}

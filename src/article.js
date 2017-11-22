@@ -51,6 +51,7 @@ state = {
           url={this.props.url}
           description={this.props.description}
           closePopUp={this.closePopUp}
+          image={this.props.image}
         />
       )
     }

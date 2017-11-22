@@ -4,6 +4,10 @@
   margin: 0 auto;
 }
 
+.preview {
+  width: 40em;
+}
+
 .popUp, .loader {
   opacity: 0.95;
   position: absolute;
