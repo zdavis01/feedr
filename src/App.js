@@ -26,25 +26,24 @@ class App extends Component {
   }
 
   switchSource(source){
-    console.log(source);
-    this.setState({
-      newsSource: source,
-      hasArticles: false
-    })
+    //console.log(source);
 
-    this.getArticles()
+
+    this.getArticles(source)
   }
 
-  getArticles() {
-    fetch(this.state.newsSource)
+  getArticles(source) {
+    console.log(source);
+    fetch(source)
     .then(results => results.json())
     .then(data => {
-      if(data.status !== `OK`) {
+      if(data.status === `ok`) {
         console.log(data);
         this.setState({
           defaultArticles: data.articles,
           hasArticles:true,
-          showLoader: false
+          showLoader: false,
+          newsSource: source,
         })
       }else{
         console.log("something is wrong with the article fetch");
@@ -55,10 +54,13 @@ class App extends Component {
 
   }
 
-
+componentDidUpdate(){
+  console.log('rendered with:', this.state.newsSource);
+}
   componentDidMount() {
+
     if(!this.hasArticles){
-      this.getArticles()
+      this.getArticles(nyTimes)
     }
   }
 

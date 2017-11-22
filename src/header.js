@@ -22,11 +22,7 @@ class Header extends Component{
   updateSource(e){
     var target = e.target.id
     var s = target == 't'? tdt: target == 'b'? bbc: nyt
-
-    this.setState({
-      source:s
-    })
-    this.props.switchSource(this.state.source.url)
+    this.props.switchSource(s.url)
   }
 
   render(){
