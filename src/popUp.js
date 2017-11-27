@@ -22,7 +22,7 @@ class PopUp extends Component {
   render() {
     return (
       <div className="popUp" style={{display: this.state.display}}>
-        <a href="#" className="closePopUp" onClick={this.close}>X</a>
+        <a className="closePopUp" onClick={this.close}>X</a>
           <div className="container">
             <img class="preview" src={this.props.image} alt="" />
             <h1>{this.props.title}</h1>

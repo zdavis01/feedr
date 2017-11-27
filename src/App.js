@@ -38,7 +38,7 @@ class App extends Component {
     .then(results => results.json())
     .then(data => {
       if(data.status === `ok`) {
-        //console.log(data);
+
         this.setState({
           defaultArticles: data.articles,
           hasArticles:true,
