@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import searchImg from './images/search.png';
 import './App.css';
 import './CSS/htmlbp5.css';
 import './CSS/normalize.css';
@@ -7,7 +6,7 @@ import Header from './header';
 import Article from './Article';
 import Loader from './loader'
 const nyTimes = "https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed";
-const sources = ["ttps://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=ee3927e291d041e6ba8fd44f4c0516ed", "https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed", "https://newsapi.org/v2/top-headlines?sources=the-telegraph&apiKey=ee3927e291d041e6ba8fd44f4c0516ed"]
+const sources = ["https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=ee3927e291d041e6ba8fd44f4c0516ed", "https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed", "https://newsapi.org/v2/top-headlines?sources=the-telegraph&apiKey=ee3927e291d041e6ba8fd44f4c0516ed"]
 
 
 class App extends Component {
@@ -17,6 +16,7 @@ class App extends Component {
     this.switchSource = this.switchSource.bind(this)
     this.processArticles = this.processArticles.bind(this)
     this.reload = this.reload.bind(this)
+    this.formatDate = this.formatDate.bind(this)
 
   }
 
@@ -37,15 +37,16 @@ class App extends Component {
     })
   }
 
-  getArticles(urls) {
-    var foo = []
-    Promise.all(urls.map(url =>
+  getArticles(urlList) {
+    var rawArticles = []
+    Promise.all(urlList.map(url =>
       fetch(url).then(response => response.json())
-    )).then(texts => {
-      texts.map(t =>
-        foo.push(t.articles)
+    )).then(collection => {
+      collection.map(item =>
+        rawArticles.push(item.articles)
       )
-      this.processArticles(foo)
+      this.formatDate(rawArticles)
+      this.processArticles(rawArticles)
     }).catch(reason => {
 
         this.setState({
@@ -66,6 +67,14 @@ class App extends Component {
       displayArticles: tempArticles,
       showLoader: false
     })
+  }
+
+  formatDate(data){
+    data.map( arr =>
+      arr.forEach(function(datum, index) {
+      console.log(new Date(datum.publishedAt))
+      })
+    )
   }
 
   reload() {
