@@ -12,3 +12,5 @@ You can view the code from your terminal by navigationg to the project folder an
 
 If you have any issues you may need to run "npm install" in the project directory and try again.
 
+It's definatley a project I will contunue to improve and work on over time. I am aware that it will need a lot of refactoring. 
+
