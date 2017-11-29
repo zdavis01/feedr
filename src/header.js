@@ -5,25 +5,28 @@ import p2 from './images/article_placeholder_2.jpg';
 import './App.css';
 import './CSS/htmlbp5.css';
 import './CSS/normalize.css';
-const bbc= {name: 'BBC News', url: 'https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=ee3927e291d041e6ba8fd44f4c0516ed'} //Top Headlines from BBC News
-const tdt = {name: 'The Daily Telegraph', url: 'https://newsapi.org/v2/top-headlines?sources=the-telegraph&apiKey=ee3927e291d041e6ba8fd44f4c0516ed'}
-const nyt = {name: 'The New York Times', url: 'https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed'}
+const bbc= {name: 'BBC News', source: 'bbc-news'} //Top Headlines from BBC News
+const tdt = {name: 'The Daily Telegraph', source: 'the-telegraph'}
+const nyt = {name: 'The New York Times', source: 'the-new-york-times'}
 
 class Header extends Component{
   constructor(props){
     super(props)
+    console.log(props);
   this.updateSource = this.updateSource.bind(this)
   this.refreshFeed = this.refreshFeed.bind(this)
+
   }
 
   state = {
-    source:nyt
+    source:nyt,
+    searchVisible: false
   }
 
   updateSource(e){
     var target = e.target.id
-    var s = target == 't'? tdt: target == 'b'? bbc: nyt
-    this.props.switchSource(s.url)
+    var s = target == 'telegraph'? tdt: target == 'bbc'? bbc: nyt
+    this.props.switchSource(s.source)
 
     this.setState({
       source: s
@@ -31,7 +34,13 @@ class Header extends Component{
   }
 
     refreshFeed(){
-      this.props.switchSource(nyt.url)
+      this.props.reload()
+    }
+
+    handleOnClick = () => {
+      this.setState({
+        searchVisible:!this.state.searchVisible
+      })
     }
 
   render(){
@@ -41,16 +50,16 @@ class Header extends Component{
           <section className="container">
             <a href="#" onClick={this.refreshFeed}><h1>Feedr</h1></a>
               <nav>
-                <ul>
-                  <li><a href="#">News Source: <span>{this.state.source.name}</span></a>
+                {this.state.searchVisible && <ul>
+                  <li><a href="#">News Source: <span>All</span></a>
                     <ul>
-                      <li><a id="n" href="#" onClick={this.updateSource}>New York Times</a></li>
-                      <li ><a id="t" href="#" onClick={this.updateSource}>The Daily Telegraph</a></li>
-                      <li ><a id="b" href="#" onClick={this.updateSource}>BBC News</a></li>
+                      <li><a id="newyorktimes" href="#" onClick={this.updateSource}>New York Times</a></li>
+                      <li ><a id="telegraph" href="#" onClick={this.updateSource}>The Daily Telegraph</a></li>
+                      <li ><a id="bbc" href="#" onClick={this.updateSource}>BBC News</a></li>
                     </ul>
                   </li>
-                </ul>
-                <section id="search">
+                </ul>}
+                <section id="search" onClick={this.handleOnClick}>
                   <input type="text" name="name" value="" />
                     <a href="#"><img src={searchImg} alt="" /></a>
                 </section>
