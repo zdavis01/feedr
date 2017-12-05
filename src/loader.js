@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 
-class Loader extends Component {
-  render() {
-    if(this.props.showLoader){
-      return (
-        <div className="loader"></div>
-      )
-    }else{
-      return null
-    }
+const Loader = (props) => {
+  if(props.showLoader){
+    return <div className="loader"></div>
   }
+  return null
 }
 
 export default Loader

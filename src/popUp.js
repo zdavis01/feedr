@@ -1,28 +1,10 @@
 import React, { Component } from 'react';
 
 class PopUp extends Component {
-  constructor(props){
-    super(props)
-    this.close = this.close.bind(this)
-  }
-  state = {
-    display: "block",
-    title: "Henry's day at the park",
-    description: "A write up on Henry the Thirds trip to Central Park"
-  }
-
-  close() {
-
-    this.setState({
-      display: "none"
-    })
-    this.props.closePopUp()
-  }
-
   render() {
     return (
-      <div className="popUp" style={{display: this.state.display}}>
-        <a className="closePopUp" onClick={this.close}>X</a>
+      <div className="popUp">
+        <a className="closePopUp" onClick={this.props.closePopUp}>X</a>
           <div className="container">
             <img class="preview" src={this.props.image} alt="" />
             <h1>{this.props.title}</h1>

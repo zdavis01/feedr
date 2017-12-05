@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import './App.css';
 import './CSS/htmlbp5.css';
 import './CSS/normalize.css';
 import Header from './header';
 import Article from './Article';
 import Loader from './loader'
-const nyTimes = "https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed";
 const sources = ["https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=ee3927e291d041e6ba8fd44f4c0516ed", "https://newsapi.org/v2/top-headlines?sources=the-new-york-times&apiKey=ee3927e291d041e6ba8fd44f4c0516ed", "https://newsapi.org/v2/top-headlines?sources=the-telegraph&apiKey=ee3927e291d041e6ba8fd44f4c0516ed"]
 
 
@@ -16,15 +16,12 @@ class App extends Component {
     this.switchSource = this.switchSource.bind(this)
     this.processArticles = this.processArticles.bind(this)
     this.reload = this.reload.bind(this)
-    this.formatDate = this.formatDate.bind(this)
-
   }
 
   state = {
     showLoader: true,
     allArticles: [],
     displayArticles: [],
-    hasArticles:true,
     newsSource: sources,
     fetchHasFailed: false
 
@@ -45,7 +42,7 @@ class App extends Component {
       collection.map(item =>
         rawArticles.push(item.articles)
       )
-      this.formatDate(rawArticles)
+      // Stunning use of map, fetch + Promise.all!
       this.processArticles(rawArticles)
     }).catch(reason => {
 
@@ -56,25 +53,12 @@ class App extends Component {
   }
 
    processArticles(raw){
-    var tempArticles = []
-    raw.map(articles =>
-      articles.map( article =>
-        tempArticles.push(article)
-      )
-    )
+    var tempArticles = [].concat.apply([], raw);
     this.setState({
       allArticles: tempArticles,
       displayArticles: tempArticles,
       showLoader: false
     })
-  }
-
-  formatDate(data){
-    data.map( arr =>
-      arr.forEach(function(datum, index) {
-      console.log(new Date(datum.publishedAt))
-      })
-    )
   }
 
   reload() {
@@ -84,61 +68,41 @@ class App extends Component {
   }
 
   componentDidMount() {
-
-    if(!this.hasArticles){
-      this.getArticles(sources)
-    }
+    this.getArticles(sources)
   }
 
   render() {
+    let message;
+
     if(this.state.fetchHasFailed){
       console.log("Failed");
-      return(
-        <div>
-          <Header
-            switchSource={this.switchSource}
-          />
-          <section id="main" className="container">
-          <div> We're so sorry, we can't retrieve your articles right now! </div>
+      message = <div> We're so sorry, we can't retrieve your articles right now! </div>
+    }
+
+    return(
+      <div>
+        <Header
+          switchSource={this.switchSource}
+          reload={this.reload}
+        />
+        <Loader showLoader={this.state.showLoader} />
+        <section id="main" className="container">
+          {message}
+          {this.state.displayArticles.map(article => {
+            return (
+              <Article
+                title={article.title}
+                category={article.author}
+                image={article.urlToImage}
+                ranking={moment(article.publishedAt).fromNow() /* or moment(article.publishedAt).format('MMM Do YY, h:mm:ss a') */}
+                description={article.description}
+                url={article.url}
+              />
+            )
+          })}
         </section>
-        </div>
-      )
-    }
-    if(!this.state.hasArticles && this.state.showLoader){
-      return(
-        <div>
-          <Header
-            switchSource={this.switchSource}
-          />
-          <Loader showLoader={this.state.showLoader} />
-          <section id="main" className="container"></section>
-        </div>
-      )
-    }else{
-      return (
-        <div>
-          <Header
-            switchSource={this.switchSource}
-            reload={this.reload}
-          />
-          <Loader showLoader={this.state.showLoader} />
-          <section id="main" className="container">
-            {this.state.displayArticles.map(article => {
-              return (
-                <Article
-                  title={article.title}
-                  category={article.author}
-                  image={article.urlToImage}
-                  ranking={article.publishedAt}
-                  description={article.description}
-                  url={article.url}
-                />
-              )
-            })}
-          </section>
-        </div>
-      )
-    }
+      </div>
+    );
   }
 }
 

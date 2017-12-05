@@ -28,7 +28,7 @@
 }
 
 .loader {
-  background-image: url(./images/book-loading.gif);
+  background-image: url(./images/book-loading.gif); 
   background-repeat: no-repeat;
   background-position: center center;
 }
