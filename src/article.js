@@ -2,26 +2,20 @@
 import React, { Component } from 'react';
 import p1 from './images/article_placeholder_1.jpg';
 import PropTypes from 'prop-types'
-import PopUp from './popUp.js'
+import PopUp from './popUp'
 
 class Article extends Component{
-  constructor(props){
-    super(props)
-    this.displayPopUp = this.displayPopUp.bind(this)
-    this.closePopUp = this.closePopUp.bind(this)
+  state = {
+    showPopUp: false
   }
 
-state = {
-  showPopUp: false
-}
-
-  displayPopUp(){
+  displayPopUp = () => {
     this.setState({
       showPopUp: true
     })
   }
 
-  closePopUp(){
+  closePopUp = () => {
     this.setState({
       showPopUp: false
     })
@@ -44,27 +38,27 @@ state = {
           <div className="clearfix"></div>
         </article>
       )
-    }else{
-      return(
-        <PopUp
-          title={this.props.title}
-          url={this.props.url}
-          description={this.props.description}
-          closePopUp={this.closePopUp}
-          image={this.props.image}
-        />
-      )
     }
+    // How would it look if we wanted to control the rendering of the popup by App.js?
+    return(
+      <PopUp
+        title={this.props.title}
+        url={this.props.url}
+        description={this.props.description}
+        closePopUp={this.closePopUp}
+        image={this.props.image}
+      />
+    )
   }
 }
 
-Article.PropTypes = {
+Article.propTypes = {
   title: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   category: PropTypes.string.isRequired,
-  ranking: PropTypes.number.isRequired,
+  ranking: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  displayPopUp: false
+  displayPopUp: PropTypes.func.isRequired,
 
 }
 
